@@ -5,6 +5,8 @@ library(dplyr)
 library(ggplot2)
 theme_set(theme_bw())
 
+my_var <- "hello world"
+
 # Load & format data
 tweet_data <- read.csv("jm9_27tweets.csv", header=FALSE)
 names(tweet_data) <- c("tweet_date","tweet_time","user_timezone")
