@@ -1,5 +1,7 @@
 # OS generated files #
 ######################
+.RData
+.Rhistory
 .DS_Store
 .DS_Store?
 ._*
