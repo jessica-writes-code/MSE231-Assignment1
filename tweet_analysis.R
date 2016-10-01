@@ -8,8 +8,8 @@ theme_set(theme_bw())
 generate_graph <- function(in_filename, out_filename) {
   
   # Load & format data
-  in_filename_csv = paste(in_filename, ".csv", sep="")
-  tweet_data <- read.csv(in_filename_csv, header=FALSE, sep="\t")
+  in_filename_txt = paste(in_filename, ".txt", sep="")
+  tweet_data <- read.table(in_filename_txt, header=FALSE, sep="\t")
   names(tweet_data) <- c("tweet_date","tweet_time","user_timezone")
 
   # Count tweets by 15-minute interval
@@ -43,7 +43,7 @@ generate_graph <- function(in_filename, out_filename) {
   ggsave(plot=tweet_plot, file=out_filename_svg, width=6, height=4)
 }
 
-in_files = c("jm9_27tweets", "bl9_30tweets")
+in_files = c("unfiltered_tweets", "filtered_tweets")
 out_files = c("Unfiltered", "Filtered")
 
 for (i in 1:2) {
