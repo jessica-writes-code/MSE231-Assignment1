@@ -53,6 +53,4 @@ for line in sys.stdin:
 		continue
 
 	# Write data to stdout
-	tweet_data = [tweet_date, tweet_time, tweet_tz]
-	tweet_writer = csv.writer(sys.stdout, delimiter=',')
-	tweet_writer.writerow(tweet_data)
+	print "\t".join([str(tweet_date), str(tweet_time), tweet_tz])
