@@ -1,5 +1,3 @@
-setwd("~/Dropbox/Graduate School/Q4 - Autumn 2016/MSE231/Assignment1/MSE231-Assignment1")
-
 library(scales)
 library(dplyr)
 library(ggplot2)
@@ -19,7 +17,7 @@ generate_graph <- function(in_filename, out_filename) {
 
   # Format dates
   tweet_summary$date_time <- paste(tweet_summary$tweet_date, tweet_summary$tweet_time, sep = " ")
-  tweet_summary$date_time <- as.POSIXct(strptime(tweet_summary$date_time, format = "%Y-%m-%d %H:%M:%S"))
+  tweet_summary$date_time <- as.POSIXct(strptime(tweet_summary$date_time, format = "%Y-%m-%d %H:%M:%S", tz="America/Los_Angeles"))
 
   ## Remove edges
   edge_times <- c(min(tweet_summary$date_time),max(tweet_summary$date_time))
@@ -30,7 +28,7 @@ generate_graph <- function(in_filename, out_filename) {
   tweet_plot <- ggplot(data=tweet_summary, aes(x=date_time, y=count, group=user_timezone, colour=user_timezone)) +
     geom_line() +
     scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
-    scale_x_datetime(breaks=date_breaks("4 hour"), labels=date_format("%H:%M")) +
+    scale_x_datetime(breaks=date_breaks("4 hour"), labels=date_format("%H:%M", tz="America/Los_Angeles")) +
     labs(title = plot_title, x = "", y = "") +
     scale_colour_discrete(name="Timezone",
                         breaks=c("Eastern Time (US & Canada)", "Central Time (US & Canada)", "Mountain Time (US & Canada)", "Pacific Time (US & Canada)"),
