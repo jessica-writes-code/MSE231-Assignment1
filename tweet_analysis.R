@@ -23,12 +23,19 @@ generate_graph <- function(in_filename, out_filename) {
   edge_times <- c(min(tweet_summary$date_time),max(tweet_summary$date_time))
   tweet_summary <- tweet_summary[tweet_summary$date_time != edge_times[1] & tweet_summary$date_time != edge_times[2],]
 
+  ## Identify limits
+  min_date <- unique(tweet_summary$tweet_date)[1]
+  min_datetime <- c(as.POSIXct(strptime(paste(min_date,"08:00:00"), format = "%Y-%m-%d %H:%M:%S"), tz="America/Los_Angeles"))
+  max_date <- unique(tweet_summary$tweet_date)[2]
+  max_datetime <- c(as.POSIXct(strptime(paste(max_date,"10:00:00"), format = "%Y-%m-%d %H:%M:%S"), tz="America/Los_Angeles"))
+  datetime_lims <- c(min_datetime, max_datetime)
+  
   # Plot tweets over time
   plot_title = paste("Number of", out_filename, "Tweets (Per Quarter-Hour)", sep=" ")
   tweet_plot <- ggplot(data=tweet_summary, aes(x=date_time, y=count, group=user_timezone, colour=user_timezone)) +
     geom_line() +
     scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
-    scale_x_datetime(breaks=date_breaks("4 hour"), labels=date_format("%H:%M", tz="America/Los_Angeles")) +
+    scale_x_datetime(breaks=date_breaks("3 hour"), labels=date_format("%H:%M", tz="America/Los_Angeles"), limits=datetime_lims) +
     labs(title = plot_title, x = "", y = "") +
     scale_colour_discrete(name="Timezone",
                         breaks=c("Eastern Time (US & Canada)", "Central Time (US & Canada)", "Mountain Time (US & Canada)", "Pacific Time (US & Canada)"),
