@@ -29,7 +29,8 @@ generate_graph <- function(in_filename, out_filename) {
   plot_title = paste("Number of", out_filename, "Tweets (Per Quarter-Hour)", sep=" ")
   tweet_plot <- ggplot(data=tweet_summary, aes(x=date_time, y=count, group=user_timezone, colour=user_timezone)) +
     geom_line() +
-    scale_y_continuous(labels = scales::comma) +
+    scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    scale_x_datetime(breaks=date_breaks("4 hour"), labels=date_format("%H:%M")) +
     labs(title = plot_title, x = "", y = "") +
     scale_colour_discrete(name="Timezone",
                         breaks=c("Eastern Time (US & Canada)", "Central Time (US & Canada)", "Mountain Time (US & Canada)", "Pacific Time (US & Canada)"),
