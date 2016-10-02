@@ -19,7 +19,7 @@ generate_graph <- function(in_filename, out_filename) {
 
   # Format dates
   tweet_summary$date_time <- paste(tweet_summary$tweet_date, tweet_summary$tweet_time, sep = " ")
-  tweet_summary$date_time <- strptime(tweet_summary$date_time, format = "%Y-%m-%d %H:%M:%S")
+  tweet_summary$date_time <- as.POSIXct(strptime(tweet_summary$date_time, format = "%Y-%m-%d %H:%M:%S"))
 
   ## Remove edges
   edge_times <- c(min(tweet_summary$date_time),max(tweet_summary$date_time))
