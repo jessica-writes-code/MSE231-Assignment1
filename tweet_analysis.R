@@ -38,9 +38,7 @@ generate_graph <- function(in_filename, out_filename) {
   
   # Save as vector formats
   out_filename_pdf = paste(out_filename, "_Tweets.pdf", sep="")
-  out_filename_svg = paste(out_filename, "_Tweets.svg", sep="")
   ggsave(plot=tweet_plot, file=out_filename_pdf, width=6, height=4)
-  ggsave(plot=tweet_plot, file=out_filename_svg, width=6, height=4)
 }
 
 in_files = c("unfiltered_tweets", "filtered_tweets")
