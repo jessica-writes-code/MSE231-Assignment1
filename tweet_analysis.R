@@ -31,12 +31,12 @@ generate_graph <- function(in_filename, out_filename) {
   datetime_lims <- c(min_datetime, max_datetime)
   
   # Plot tweets over time
-  plot_title = paste("Number of", out_filename, "Tweets (Per Quarter-Hour)", sep=" ")
+  plot_title = paste(out_filename, "Tweets", sep=" ")
   tweet_plot <- ggplot(data=tweet_summary, aes(x=date_time, y=count, group=user_timezone, colour=user_timezone)) +
     geom_line() +
     scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
     scale_x_datetime(breaks=date_breaks("3 hour"), labels=date_format("%H:%M", tz="America/Los_Angeles"), limits=datetime_lims) +
-    labs(title = plot_title, x = "", y = "") +
+    labs(title = plot_title, x = "Pacific Standard Time", y = "Tweets per Quarter-Hour") +
     scale_colour_discrete(name="Timezone",
                         breaks=c("Eastern Time (US & Canada)", "Central Time (US & Canada)", "Mountain Time (US & Canada)", "Pacific Time (US & Canada)"),
                         labels=c("EST", "CST", "MST", "PST"))
