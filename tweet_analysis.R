@@ -1,5 +1,3 @@
-setwd("~/Dropbox/Graduate School/Q4 - Autumn 2016/MSE231/Assignment1/MSE231-Assignment1")
-
 library(scales)
 library(dplyr)
 library(ggplot2)
@@ -19,19 +17,26 @@ generate_graph <- function(in_filename, out_filename) {
 
   # Format dates
   tweet_summary$date_time <- paste(tweet_summary$tweet_date, tweet_summary$tweet_time, sep = " ")
-  tweet_summary$date_time <- strptime(tweet_summary$date_time, format = "%Y-%m-%d %H:%M:%S")
+  tweet_summary$date_time <- as.POSIXct(strptime(tweet_summary$date_time, format = "%Y-%m-%d %H:%M:%S", tz="America/Los_Angeles"))
 
   ## Remove edges
   edge_times <- c(min(tweet_summary$date_time),max(tweet_summary$date_time))
   tweet_summary <- tweet_summary[tweet_summary$date_time != edge_times[1] & tweet_summary$date_time != edge_times[2],]
 
+  ## Identify limits
+  min_date <- unique(tweet_summary$tweet_date)[1]
+  min_datetime <- c(as.POSIXct(strptime(paste(min_date,"08:00:00"), format = "%Y-%m-%d %H:%M:%S"), tz="America/Los_Angeles"))
+  max_date <- unique(tweet_summary$tweet_date)[2]
+  max_datetime <- c(as.POSIXct(strptime(paste(max_date,"10:00:00"), format = "%Y-%m-%d %H:%M:%S"), tz="America/Los_Angeles"))
+  datetime_lims <- c(min_datetime, max_datetime)
+  
   # Plot tweets over time
-  plot_title = paste("Number of", out_filename, "Tweets (Per Quarter-Hour)", sep=" ")
+  plot_title = paste(out_filename, "Tweets", sep=" ")
   tweet_plot <- ggplot(data=tweet_summary, aes(x=date_time, y=count, group=user_timezone, colour=user_timezone)) +
     geom_line() +
-    geom_point() +
-    scale_y_continuous(labels = scales::comma) +
-    labs(title = plot_title, x = "", y = "") +
+    scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    scale_x_datetime(breaks=date_breaks("3 hour"), labels=date_format("%H:%M", tz="America/Los_Angeles"), limits=datetime_lims) +
+    labs(title = plot_title, x = "Pacific Standard Time", y = "Tweets per Quarter-Hour") +
     scale_colour_discrete(name="Timezone",
                         breaks=c("Eastern Time (US & Canada)", "Central Time (US & Canada)", "Mountain Time (US & Canada)", "Pacific Time (US & Canada)"),
                         labels=c("EST", "CST", "MST", "PST"))
