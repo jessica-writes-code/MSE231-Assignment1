@@ -11,8 +11,8 @@ generate_graph <- function(in_filename, out_filename) {
   names(tweet_data) <- c("tweet_date","tweet_time","user_timezone")
 
   # Count tweets by 15-minute interval
-  tweet_data_group_by <- group_by(tweet_data, tweet_date, tweet_time, user_timezone)
-  tweet_summary <- summarise(tweet_data_group_by, count = n())
+  tweet_summary <- group_by(tweet_data, tweet_date, tweet_time, user_timezone) %>% 
+                    summarise(count = n())
   tweet_summary$user_timezone <- factor(tweet_summary$user_timezone, levels=c("Eastern Time (US & Canada)", "Central Time (US & Canada)", "Mountain Time (US & Canada)", "Pacific Time (US & Canada)"), ordered=TRUE)
 
   # Format dates
