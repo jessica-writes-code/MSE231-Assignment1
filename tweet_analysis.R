@@ -11,8 +11,8 @@ generate_graph <- function(in_filename, out_filename) {
   names(tweet_data) <- c("tweet_date","tweet_time","user_timezone")
 
   # Count tweets by 15-minute interval
-  tweet_data_group_by <- group_by(tweet_data, tweet_date, tweet_time, user_timezone)
-  tweet_summary <- summarise(tweet_data_group_by, count = n())
+  tweet_summary <- group_by(tweet_data, tweet_date, tweet_time, user_timezone) %>% 
+                    summarise(count = n())
   tweet_summary$user_timezone <- factor(tweet_summary$user_timezone, levels=c("Eastern Time (US & Canada)", "Central Time (US & Canada)", "Mountain Time (US & Canada)", "Pacific Time (US & Canada)"), ordered=TRUE)
 
   # Format dates
@@ -34,9 +34,10 @@ generate_graph <- function(in_filename, out_filename) {
   plot_title = paste(out_filename, "Tweets", sep=" ")
   tweet_plot <- ggplot(data=tweet_summary, aes(x=date_time, y=count, group=user_timezone, colour=user_timezone)) +
     geom_line() +
-    scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
-    scale_x_datetime(breaks=date_breaks("3 hour"), labels=date_format("%H:%M", tz="America/Los_Angeles"), limits=datetime_lims) +
     labs(title = plot_title, x = "Pacific Standard Time", y = "Tweets per Quarter-Hour") +
+    scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    scale_x_datetime(breaks=date_breaks("2 hour"), labels=date_format("%d %b %H:%M", tz="America/Los_Angeles"), limits=datetime_lims) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, size=8)) +
     scale_colour_discrete(name="Timezone",
                         breaks=c("Eastern Time (US & Canada)", "Central Time (US & Canada)", "Mountain Time (US & Canada)", "Pacific Time (US & Canada)"),
                         labels=c("EST", "CST", "MST", "PST"))
