@@ -25,9 +25,9 @@ generate_graph <- function(in_filename, out_filename) {
 
   ## Identify limits
   min_date <- unique(tweet_summary$tweet_date)[1]
-  min_datetime <- c(as.POSIXct(strptime(paste(min_date,"08:00:00"), format = "%Y-%m-%d %H:%M:%S"), tz="America/Los_Angeles"))
+  min_datetime <- c(as.POSIXct(strptime(paste(min_date,"16:00:00"), format = "%Y-%m-%d %H:%M:%S"), tz="America/Los_Angeles"))
   max_date <- unique(tweet_summary$tweet_date)[2]
-  max_datetime <- c(as.POSIXct(strptime(paste(max_date,"10:00:00"), format = "%Y-%m-%d %H:%M:%S"), tz="America/Los_Angeles"))
+  max_datetime <- c(as.POSIXct(strptime(paste(max_date,"20:00:00"), format = "%Y-%m-%d %H:%M:%S"), tz="America/Los_Angeles"))
   datetime_lims <- c(min_datetime, max_datetime)
   
   # Plot tweets over time
