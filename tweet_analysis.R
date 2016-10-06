@@ -17,17 +17,17 @@ generate_graph <- function(in_filename, out_filename) {
 
   # Format dates
   tweet_summary$date_time <- paste(tweet_summary$tweet_date, tweet_summary$tweet_time, sep = " ")
-  tweet_summary$date_time <- as.POSIXct(strptime(tweet_summary$date_time, format = "%Y-%m-%d %H:%M:%S", tz="America/Los_Angeles"))
+  tweet_summary <- mutate(tweet_summary, date_time = as.POSIXct(strptime(date_time, format = "%Y-%m-%d %H:%M:%S", tz="America/Los_Angeles"))) 
 
   ## Remove edges
   edge_times <- c(min(tweet_summary$date_time),max(tweet_summary$date_time))
-  tweet_summary <- tweet_summary[tweet_summary$date_time != edge_times[1] & tweet_summary$date_time != edge_times[2],]
+  tweet_summary <- filter(tweet_summary, date_time != edge_times[1] & date_time != edge_times[2])
 
   ## Identify limits
   min_date <- unique(tweet_summary$tweet_date)[1]
-  min_datetime <- c(as.POSIXct(strptime(paste(min_date,"16:00:00"), format = "%Y-%m-%d %H:%M:%S"), tz="America/Los_Angeles"))
+  min_datetime <- as.POSIXct(strptime(paste(min_date,"16:00:00"), format = "%Y-%m-%d %H:%M:%S"), tz="America/Los_Angeles")
   max_date <- unique(tweet_summary$tweet_date)[2]
-  max_datetime <- c(as.POSIXct(strptime(paste(max_date,"20:00:00"), format = "%Y-%m-%d %H:%M:%S"), tz="America/Los_Angeles"))
+  max_datetime <- as.POSIXct(strptime(paste(max_date,"20:00:00"), format = "%Y-%m-%d %H:%M:%S"), tz="America/Los_Angeles")
   datetime_lims <- c(min_datetime, max_datetime)
   
   # Plot tweets over time
