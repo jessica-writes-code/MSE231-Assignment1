@@ -6,7 +6,7 @@ theme_set(theme_bw())
 generate_graph <- function(in_filename, out_filename) {
   
   # Load & format data
-  in_filename_txt = paste(in_filename, ".txt", sep="")
+  in_filename_txt <- paste0(in_filename, ".txt")
   tweet_data <- read.table(in_filename_txt, header=FALSE, sep="\t")
   names(tweet_data) <- c("tweet_date","tweet_time","user_timezone")
 
@@ -16,7 +16,7 @@ generate_graph <- function(in_filename, out_filename) {
   tweet_summary$user_timezone <- factor(tweet_summary$user_timezone, levels=c("Eastern Time (US & Canada)", "Central Time (US & Canada)", "Mountain Time (US & Canada)", "Pacific Time (US & Canada)"), ordered=TRUE)
 
   # Format dates
-  tweet_summary$date_time <- paste(tweet_summary$tweet_date, tweet_summary$tweet_time, sep = " ")
+  tweet_summary$date_time <- paste(tweet_summary$tweet_date, tweet_summary$tweet_time)
   tweet_summary <- mutate(tweet_summary, date_time = as.POSIXct(strptime(date_time, format = "%Y-%m-%d %H:%M:%S", tz="America/Los_Angeles"))) 
 
   ## Remove edges
@@ -31,7 +31,7 @@ generate_graph <- function(in_filename, out_filename) {
   datetime_lims <- c(min_datetime, max_datetime)
   
   # Plot tweets over time
-  plot_title = paste(out_filename, "Tweets", sep=" ")
+  plot_title <- paste(out_filename, "Tweets")
   tweet_plot <- ggplot(data=tweet_summary, aes(x=date_time, y=count, group=user_timezone, colour=user_timezone)) +
     geom_line() +
     labs(title = plot_title, x = "Pacific Standard Time", y = "Tweets per Quarter-Hour") +
@@ -43,12 +43,12 @@ generate_graph <- function(in_filename, out_filename) {
                         labels=c("EST", "CST", "MST", "PST"))
   
   # Save as vector formats
-  out_filename_pdf = paste(out_filename, "_Tweets.pdf", sep="")
+  out_filename_pdf <- paste0(out_filename, "_Tweets.pdf")
   ggsave(plot=tweet_plot, file=out_filename_pdf, width=6, height=4)
 }
 
-in_files = c("unfiltered_tweets", "filtered_tweets")
-out_files = c("Unfiltered", "Filtered")
+in_files <- c("unfiltered_tweets", "filtered_tweets")
+out_files <- c("Unfiltered", "Filtered")
 
 for (i in 1:2) {
   generate_graph(in_files[i], out_files[i])
